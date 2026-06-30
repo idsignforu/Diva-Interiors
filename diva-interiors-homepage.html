@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diva Interiors — Luxury Interior Design Studio, Hyderabad</title>
+<meta name="description" content="Diva Interiors crafts bespoke luxury homes, villas and commercial spaces in Hyderabad — turnkey interior design with a five-stage atelier process.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<style>
+:root{
+  --ivory:#F6F1E9;
+  --ivory-deep:#EFE7D8;
+  --charcoal:#191714;
+  --charcoal-soft:#28241F;
+  --sand:#E4D8C4;
+  --walnut:#7A5C3E;
+  --marble:#C9C1B2;
+  --gold:#B68C4F;
+  --gold-soft:#D9B97E;
+  --line: rgba(25,23,20,0.10);
+  --line-light: rgba(246,241,233,0.16);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{background:var(--ivory);}
+body{
+  font-family:'Manrope', sans-serif;
+  background:var(--ivory);
+  color:var(--charcoal);
+  overflow-x:hidden;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.display{
+  font-family:'Clash Display', 'Manrope', sans-serif;
+  font-weight:500;
+  letter-spacing:-0.02em;
+  line-height:1.02;
+}
+.mono{font-family:'JetBrains Mono', monospace; letter-spacing:0.04em;}
+a{color:inherit; text-decoration:none;}
+img{display:block; max-width:100%;}
+::selection{background:var(--gold); color:var(--ivory);}
+.wrap{max-width:1360px; margin:0 auto; padding:0 48px;}
+@media(max-width:780px){.wrap{padding:0 22px;}}
+
+/* ---------- custom cursor ---------- */
+#cursor{
+  position:fixed; top:0; left:0; width:14px; height:14px; border-radius:50%;
+  background:var(--gold); pointer-events:none; z-index:9999; mix-blend-mode:difference;
+  transform:translate(-50%,-50%); transition:width .25s, height .25s, background .25s;
+}
+#cursor.big{width:64px; height:64px; background:var(--ivory);}
+@media(max-width:900px){#cursor{display:none;}}
+
+/* ---------- loader ---------- */
+#loader{
+  position:fixed; inset:0; background:var(--charcoal); z-index:10000;
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
+}
+#loader .mark{font-family:'Clash Display'; font-size:15px; letter-spacing:0.3em; color:var(--gold-soft); text-transform:uppercase;}
+#loader .bar{width:240px; height:1px; background:var(--line-light); position:relative; overflow:hidden;}
+#loader .bar span{position:absolute; left:0; top:0; height:100%; width:0%; background:var(--gold);}
+#loader .pct{color:var(--ivory); font-family:'JetBrains Mono'; font-size:11px; opacity:.5;}
+
+/* ---------- nav ---------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:26px 48px; mix-blend-mode:normal;
+  transition:padding .4s ease, background .4s ease, backdrop-filter .4s ease;
+}
+header.scrolled{
+  padding:14px 48px; background:rgba(246,241,233,0.72); backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid var(--line);
+}
+@media(max-width:780px){header,header.scrolled{padding:18px 22px;}}
+.logo{font-family:'Clash Display'; font-size:21px; letter-spacing:0.02em; color:var(--charcoal);}
+.logo span{color:var(--gold);}
+nav.links{display:flex; gap:38px; font-size:13.5px; font-weight:500; letter-spacing:0.01em;}
+nav.links a{position:relative; padding:4px 0; color:var(--charcoal);}
+nav.links a::after{content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--gold); transition:width .35s ease;}
+nav.links a:hover::after{width:100%;}
+@media(max-width:1000px){nav.links{display:none;}}
+.nav-cta{
+  display:inline-flex; align-items:center; gap:8px; padding:11px 22px; border:1px solid var(--charcoal);
+  border-radius:100px; font-size:12.5px; font-weight:600; letter-spacing:0.03em;
+  transition:background .3s, color .3s;
+}
+.nav-cta:hover{background:var(--charcoal); color:var(--ivory);}
+
+/* ---------- hero ---------- */
+#hero{
+  position:relative; height:100svh; min-height:560px; overflow:hidden;
+  display:flex; align-items:flex-end; background:var(--charcoal);
+}
+#hero video, #hero .hero-img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.86;
+}
+#hero::before{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(15,13,11,0.35) 0%, rgba(15,13,11,0.15) 35%, rgba(15,13,11,0.78) 100%);
+  z-index:1;
+}
+.hero-inner{position:relative; z-index:2; width:100%; padding:0 48px 64px;}
+@media(max-width:780px){.hero-inner{padding:0 22px 48px;}}
+.hero-eyebrow{
+  color:var(--gold-soft); font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.25em; text-transform:uppercase;
+  margin-bottom:22px; display:flex; align-items:center; gap:12px;
+}
+.hero-eyebrow::before{content:''; width:34px; height:1px; background:var(--gold-soft);}
+.hero-title{
+  color:var(--ivory); font-size:clamp(44px,8.2vw,118px); max-width:1180px;
+}
+.hero-title em{font-style:italic; color:var(--gold-soft); font-weight:400;}
+.hero-sub{
+  color:rgba(246,241,233,0.78); max-width:480px; font-size:16.5px; line-height:1.6; margin-top:26px;
+}
+.hero-bottom{display:flex; justify-content:space-between; align-items:flex-end; margin-top:48px; gap:24px; flex-wrap:wrap;}
+.hero-stats{display:flex; gap:42px;}
+.hero-stats div{color:var(--ivory);}
+.hero-stats b{display:block; font-family:'Clash Display'; font-size:26px; color:var(--gold-soft);}
+.hero-stats span{font-size:11.5px; opacity:.65; font-family:'JetBrains Mono'; letter-spacing:0.05em;}
+.scroll-cue{
+  position:absolute; right:48px; bottom:26px; z-index:2; color:var(--ivory); writing-mode:vertical-rl;
+  font-size:11px; letter-spacing:0.2em; font-family:'JetBrains Mono'; opacity:.6; display:flex; align-items:center; gap:10px;
+}
+.scroll-cue .line{width:1px; height:46px; background:var(--ivory); opacity:.5; animation:cue 2.2s ease-in-out infinite;}
+@keyframes cue{0%{transform:scaleY(0); transform-origin:top;}50%{transform:scaleY(1); transform-origin:top;}50.01%{transform-origin:bottom;}100%{transform:scaleY(0); transform-origin:bottom;}}
+@media(max-width:780px){.scroll-cue{display:none;}}
+
+/* dissolve canvas */
+#dissolve{position:absolute; inset:0; z-index:3; pointer-events:none;}
+
+/* ---------- section basics ---------- */
+section{position:relative; padding:140px 0;}
+@media(max-width:780px){section{padding:88px 0;}}
+.eyebrow{
+  font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--walnut); display:flex; align-items:center; gap:12px; margin-bottom:20px;
+}
+.eyebrow::before{content:''; width:28px; height:1px; background:var(--walnut);}
+.h2{font-size:clamp(32px,4.6vw,58px);}
+.lede{font-size:17px; line-height:1.7; color:rgba(25,23,20,0.68); max-width:560px;}
+
+/* reveal helper */
+.reveal{opacity:0; transform:translateY(46px);}
+
+/* ---------- about ---------- */
+#about .about-grid{display:grid; grid-template-columns:1fr 1.05fr; gap:80px; align-items:center;}
+@media(max-width:980px){#about .about-grid{grid-template-columns:1fr; gap:48px;}}
+.about-imgwrap{position:relative; border-radius:28px; overflow:hidden; aspect-ratio:4/5;}
+.about-imgwrap img{width:100%; height:100%; object-fit:cover;}
+.founder-card{
+  position:absolute; left:-30px; bottom:-30px; background:rgba(246,241,233,0.78); backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.5); border-radius:20px; padding:22px 26px; max-width:260px;
+  box-shadow:0 30px 60px rgba(25,23,20,0.18);
+}
+@media(max-width:560px){.founder-card{left:14px; bottom:-22px; max-width:210px; padding:16px 18px;}}
+.founder-card .name{font-family:'Clash Display'; font-size:18px;}
+.founder-card .role{font-size:12px; color:var(--walnut); margin-top:2px;}
+.founder-card p{font-size:12.5px; line-height:1.55; margin-top:10px; color:rgba(25,23,20,0.7);}
+.stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:56px; border-top:1px solid var(--line); padding-top:36px;}
+@media(max-width:680px){.stat-row{grid-template-columns:repeat(2,1fr); row-gap:32px;}}
+.stat-row .num{font-family:'Clash Display'; font-size:clamp(30px,4vw,46px); color:var(--charcoal);}
+.stat-row .num span{color:var(--gold);}
+.stat-row .lbl{font-size:12px; color:rgba(25,23,20,0.55); margin-top:6px; letter-spacing:0.01em;}
+
+/* ---------- services horizontal ---------- */
+#services{background:var(--charcoal); color:var(--ivory); padding:120px 0 0;}
+#services .head{padding:0 48px;}
+@media(max-width:780px){#services .head{padding:0 22px;}}
+#services .eyebrow{color:var(--gold-soft);}
+#services .eyebrow::before{background:var(--gold-soft);}
+#services h2{color:var(--ivory);}
+#services .lede{color:rgba(246,241,233,0.6);}
+.hscroll-wrap{margin-top:64px; overflow:hidden;}
+.hscroll{display:flex; gap:28px; padding:0 48px 120px; width:max-content;}
+@media(max-width:780px){.hscroll{padding:0 22px 80px;}}
+.service-card{
+  width:380px; flex-shrink:0; border-radius:24px; overflow:hidden; position:relative; aspect-ratio:3/4;
+  background:var(--charcoal-soft); border:1px solid var(--line-light);
+}
+.service-card img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55; transition:opacity .5s, transform .7s;}
+.service-card:hover img{opacity:.78; transform:scale(1.06);}
+.service-card .num{position:absolute; top:24px; left:24px; font-family:'JetBrains Mono'; font-size:12px; color:var(--gold-soft); z-index:2;}
+.service-card .body{position:absolute; left:24px; right:24px; bottom:24px; z-index:2;}
+.service-card .body h3{font-size:25px; color:var(--ivory);}
+.service-card .body p{font-size:13px; color:rgba(246,241,233,0.6); margin-top:8px; line-height:1.55;}
+.service-card .arrow{
+  margin-top:16px; width:38px; height:38px; border-radius:50%; border:1px solid rgba(246,241,233,0.4);
+  display:flex; align-items:center; justify-content:center; transition:background .3s, transform .3s;
+}
+.service-card:hover .arrow{background:var(--gold); transform:rotate(45deg);}
+
+/* ---------- before/after ---------- */
+#ba{background:var(--ivory-deep);}
+.ba-wrap{margin-top:60px; position:relative; border-radius:28px; overflow:hidden; aspect-ratio:16/9; cursor:ew-resize; user-select:none; box-shadow:0 40px 90px rgba(25,23,20,0.16);}
+.ba-wrap img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+.ba-after{z-index:1;}
+.ba-before-wrap{position:absolute; inset:0; width:50%; overflow:hidden; z-index:2;}
+.ba-before-wrap img{width:100%; height:100%; object-fit:cover;}
+.ba-before-wrap{ width:50%; }
+.ba-handle{
+  position:absolute; top:0; bottom:0; left:50%; width:2px; background:var(--ivory); z-index:3; transform:translateX(-1px);
+}
+.ba-handle .knob{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:54px; height:54px; border-radius:50%;
+  background:rgba(246,241,233,0.85); backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+.ba-handle .knob::before, .ba-handle .knob::after{content:''; width:7px; height:7px; border-left:2px solid var(--charcoal); border-bottom:2px solid var(--charcoal); }
+.ba-handle .knob::before{transform:rotate(135deg); margin-right:8px;}
+.ba-handle .knob::after{transform:rotate(-45deg); margin-left:8px;}
+.ba-tag{position:absolute; top:22px; z-index:3; font-family:'JetBrains Mono'; font-size:11.5px; letter-spacing:0.12em; padding:8px 14px; border-radius:100px; background:rgba(25,23,20,0.55); color:var(--ivory); backdrop-filter:blur(6px);}
+.ba-tag.left{left:22px;} .ba-tag.right{right:22px;}
+
+/* ---------- portfolio ---------- */
+.filter-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:48px;}
+.filter-btn{
+  padding:10px 20px; border-radius:100px; border:1px solid var(--line); font-size:13px; font-weight:600;
+  background:transparent; cursor:pointer; transition:all .3s;
+}
+.filter-btn.active, .filter-btn:hover{background:var(--charcoal); color:var(--ivory); border-color:var(--charcoal);}
+.masonry{
+  margin-top:44px; columns:3 280px; column-gap:24px;
+}
+@media(max-width:780px){.masonry{columns:1 280px;}}
+.mcard{
+  break-inside:avoid; margin-bottom:24px; border-radius:22px; overflow:hidden; position:relative; cursor:pointer;
+  box-shadow:0 1px 0 var(--line);
+}
+.mcard img{width:100%; display:block; transition:transform .8s cubic-bezier(.2,.8,.2,1);}
+.mcard:hover img{transform:scale(1.07);}
+.mcard .overlay{
+  position:absolute; inset:0; background:linear-gradient(0deg, rgba(15,13,11,0.78) 0%, rgba(15,13,11,0) 45%);
+  display:flex; align-items:flex-end; padding:22px; opacity:0; transition:opacity .4s;
+}
+.mcard:hover .overlay{opacity:1;}
+.mcard .overlay div p{color:rgba(246,241,233,.65); font-size:12px; margin-top:4px; font-family:'JetBrains Mono'; letter-spacing:.06em;}
+.mcard .overlay div h4{color:var(--ivory); font-size:19px; font-family:'Clash Display';}
+
+/* ---------- timeline ---------- */
+#timeline{background:var(--charcoal); color:var(--ivory);}
+#timeline .eyebrow{color:var(--gold-soft);} #timeline .eyebrow::before{background:var(--gold-soft);}
+#timeline h2{color:var(--ivory);} #timeline .lede{color:rgba(246,241,233,.6);}
+.tl{margin-top:80px; position:relative;}
+.tl-line{position:absolute; left:0; right:0; top:13px; height:1px; background:var(--line-light);}
+.tl-line span{position:absolute; left:0; top:0; height:100%; width:0%; background:var(--gold);}
+.tl-row{display:grid; grid-template-columns:repeat(5,1fr); gap:24px;}
+@media(max-width:900px){.tl-row{grid-template-columns:1fr; gap:48px;}}
+.tl-item{position:relative; padding-top:36px;}
+.tl-item .dot{position:absolute; top:0; left:0; width:13px; height:13px; border-radius:50%; background:var(--charcoal-soft); border:2px solid var(--gold-soft);}
+.tl-item .step{font-family:'JetBrains Mono'; font-size:11px; color:var(--gold-soft); letter-spacing:.1em;}
+.tl-item h4{margin-top:10px; font-size:21px;}
+.tl-item p{margin-top:10px; font-size:13.5px; line-height:1.6; color:rgba(246,241,233,.58);}
+
+/* ---------- materials ---------- */
+.marquee{margin-top:64px; overflow:hidden; position:relative; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:34px 0;}
+.marquee-track{display:flex; gap:90px; width:max-content; animation:scroll 26s linear infinite;}
+.marquee-track span{font-family:'Clash Display'; font-size:26px; color:rgba(25,23,20,0.32); white-space:nowrap; display:flex; align-items:center; gap:14px;}
+.marquee-track span::after{content:'◆'; font-size:9px; color:var(--gold);}
+@keyframes scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+
+/* ---------- estimator ---------- */
+#estimator{background:var(--ivory-deep);}
+.est-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; margin-top:56px;}
+@media(max-width:900px){.est-grid{grid-template-columns:1fr;}}
+.est-panel{
+  background:rgba(255,255,255,0.55); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.6);
+  border-radius:26px; padding:40px;
+}
+@media(max-width:560px){.est-panel{padding:26px;}}
+.field{margin-bottom:30px;}
+.field label{display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:14px;}
+.field label .val{color:var(--walnut); font-family:'JetBrains Mono'; font-weight:500;}
+input[type=range]{
+  -webkit-appearance:none; width:100%; height:2px; background:var(--marble); border-radius:2px; outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:var(--gold); cursor:pointer; border:4px solid var(--ivory); box-shadow:0 4px 14px rgba(0,0,0,.25);
+}
+.chip-row{display:flex; gap:10px; flex-wrap:wrap;}
+.chip{padding:9px 16px; border-radius:100px; border:1px solid var(--line); font-size:12.5px; font-weight:600; cursor:pointer; transition:all .25s;}
+.chip.active{background:var(--charcoal); color:var(--ivory); border-color:var(--charcoal);}
+.est-result{display:flex; flex-direction:column; justify-content:center; align-items:flex-start;}
+.est-result .lbl{font-family:'JetBrains Mono'; font-size:12px; letter-spacing:.1em; color:var(--walnut); text-transform:uppercase;}
+.est-result .price{font-family:'Clash Display'; font-size:clamp(40px,5.4vw,68px); margin-top:14px;}
+.est-result .price span{color:var(--gold); font-size:0.5em; vertical-align:middle;}
+.est-result .note{margin-top:18px; font-size:13.5px; color:rgba(25,23,20,0.6); max-width:380px; line-height:1.6;}
+
+/* ---------- testimonials ---------- */
+.test-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:56px;}
+@media(max-width:900px){.test-grid{grid-template-columns:1fr;}}
+.test-card{
+  border-radius:22px; padding:32px; background:#fff; border:1px solid var(--line);
+  display:flex; flex-direction:column; justify-content:space-between; min-height:240px;
+}
+.test-card .stars{color:var(--gold); font-size:14px; letter-spacing:3px;}
+.test-card p{margin-top:18px; font-size:14.5px; line-height:1.65; color:rgba(25,23,20,0.78);}
+.test-card .who{margin-top:22px; display:flex; align-items:center; gap:12px;}
+.test-card .who img{width:42px; height:42px; border-radius:50%; object-fit:cover;}
+.test-card .who b{display:block; font-size:13.5px;}
+.test-card .who span{font-size:11.5px; color:rgba(25,23,20,0.5);}
+
+/* ---------- instagram ---------- */
+.insta-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-top:48px;}
+@media(max-width:900px){.insta-grid{grid-template-columns:repeat(3,1fr);}}
+.insta-item{position:relative; aspect-ratio:1; border-radius:16px; overflow:hidden;}
+.insta-item img{width:100%; height:100%; object-fit:cover; transition:transform .6s;}
+.insta-item:hover img{transform:scale(1.1);}
+.insta-item .ov{position:absolute; inset:0; background:rgba(25,23,20,0.0); display:flex; align-items:center; justify-content:center; transition:background .3s;}
+.insta-item:hover .ov{background:rgba(25,23,20,0.35);}
+.insta-item .ov svg{opacity:0; transition:opacity .3s;}
+.insta-item:hover .ov svg{opacity:1;}
+
+/* ---------- faq ---------- */
+.faq-list{margin-top:48px; max-width:780px;}
+.faq-item{border-bottom:1px solid var(--line); padding:26px 0; cursor:pointer;}
+.faq-q{display:flex; justify-content:space-between; align-items:center; gap:24px; font-family:'Clash Display'; font-size:19px;}
+.faq-q .plus{width:26px; height:26px; border-radius:50%; border:1px solid var(--line); flex-shrink:0; position:relative; transition:transform .35s;}
+.faq-q .plus::before, .faq-q .plus::after{content:''; position:absolute; background:var(--charcoal); top:50%; left:50%; transform:translate(-50%,-50%);}
+.faq-q .plus::before{width:10px; height:1.4px;} .faq-q .plus::after{width:1.4px; height:10px; transition:opacity .3s;}
+.faq-item.open .plus{transform:rotate(135deg); background:var(--charcoal);}
+.faq-item.open .plus::before, .faq-item.open .plus::after{background:var(--ivory);}
+.faq-a{max-height:0; overflow:hidden; transition:max-height .45s ease;}
+.faq-a p{padding-top:16px; font-size:14.5px; line-height:1.7; color:rgba(25,23,20,0.65); max-width:600px;}
+
+/* ---------- booking ---------- */
+#booking{background:var(--charcoal); color:var(--ivory);}
+.book-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:80px; margin-top:56px;}
+@media(max-width:900px){.book-grid{grid-template-columns:1fr; gap:40px;}}
+#booking .eyebrow{color:var(--gold-soft);} #booking .eyebrow::before{background:var(--gold-soft);}
+#booking h2{color:var(--ivory);}
+.book-info p{font-size:15px; line-height:1.7; color:rgba(246,241,233,.62); margin-top:18px; max-width:380px;}
+.book-info .contact-line{margin-top:36px; display:flex; flex-direction:column; gap:14px;}
+.book-info .contact-line div{display:flex; gap:14px; align-items:center; font-size:14px;}
+.book-info .contact-line span{color:rgba(246,241,233,.5); font-family:'JetBrains Mono'; font-size:11.5px; min-width:60px;}
+.form-card{background:rgba(246,241,233,0.06); border:1px solid var(--line-light); border-radius:26px; padding:40px; backdrop-filter:blur(10px);}
+@media(max-width:560px){.form-card{padding:24px;}}
+.form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+@media(max-width:560px){.form-row{grid-template-columns:1fr;}}
+.f-group{margin-bottom:20px;}
+.f-group label{display:block; font-size:11.5px; font-family:'JetBrains Mono'; letter-spacing:.06em; color:rgba(246,241,233,.5); margin-bottom:9px; text-transform:uppercase;}
+.f-group input, .f-group select, .f-group textarea{
+  width:100%; background:transparent; border:none; border-bottom:1px solid var(--line-light); color:var(--ivory);
+  padding:10px 0; font-size:14.5px; font-family:'Manrope'; outline:none; transition:border-color .3s;
+}
+.f-group select option{color:#111;}
+.f-group input:focus, .f-group select:focus, .f-group textarea:focus{border-color:var(--gold);}
+.submit-btn{
+  margin-top:12px; width:100%; padding:17px; border-radius:100px; background:var(--gold); color:var(--charcoal);
+  font-weight:700; font-size:14px; letter-spacing:.02em; border:none; cursor:pointer; transition:transform .3s, background .3s;
+}
+.submit-btn:hover{background:var(--gold-soft); transform:translateY(-2px);}
+
+/* ---------- footer ---------- */
+footer{background:var(--charcoal); color:rgba(246,241,233,.65); padding:90px 0 30px; border-top:1px solid var(--line-light);}
+.foot-top{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px;}
+@media(max-width:780px){.foot-top{grid-template-columns:1fr 1fr; row-gap:40px;}}
+.foot-top h3{color:var(--ivory); font-size:13px; font-family:'JetBrains Mono'; letter-spacing:.08em; margin-bottom:20px; text-transform:uppercase;}
+.foot-top ul{list-style:none;}
+.foot-top li{margin-bottom:12px; font-size:14px;}
+.foot-top li a:hover{color:var(--gold-soft);}
+.foot-logo{font-family:'Clash Display'; font-size:28px; color:var(--ivory); margin-bottom:14px;}
+.foot-logo span{color:var(--gold);}
+.foot-top .desc{font-size:14px; line-height:1.7; max-width:300px;}
+.foot-bottom{
+  margin-top:80px; padding-top:24px; border-top:1px solid var(--line-light); display:flex; justify-content:space-between;
+  font-size:12px; color:rgba(246,241,233,.4); flex-wrap:wrap; gap:12px;
+}
+
+/* magnetic */
+.magnetic{display:inline-block;}
+
+/* fade-in img */
+.lazy-img{filter:blur(14px); transition:filter .8s ease;}
+.lazy-img.loaded{filter:blur(0);}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<div id="loader">
+  <div class="mark">Diva Interiors</div>
+  <div class="bar"><span id="loaderBar"></span></div>
+  <div class="pct" id="loaderPct">0%</div>
+</div>
+
+<header id="siteHeader">
+  <a href="#hero" class="logo">DIVA<span>.</span>INTERIORS</a>
+  <nav class="links">
+    <a href="#about">Studio</a>
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#process">Process</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a href="#booking" class="nav-cta magnetic">Book Consultation</a>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <img class="hero-img" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2400&auto=format&fit=crop" alt="Luxury living room interior with warm wood tones, Hyderabad">
+  <canvas id="dissolve"></canvas>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Luxury Interior Atelier — Hyderabad</div>
+    <h1 class="hero-title">Interiors that feel <em>inevitable.</em></h1>
+    <p class="hero-sub">Diva Interiors designs and builds turnkey homes, villas and private spaces for clients who want quiet, considered luxury — not noise.</p>
+    <div class="hero-bottom">
+      <div class="hero-stats">
+        <div><b>240+</b><span>PROJECTS DELIVERED</span></div>
+        <div><b>11</b><span>YEARS IN PRACTICE</span></div>
+        <div><b>4.9</b><span>GOOGLE RATING</span></div>
+      </div>
+      <a href="#booking" class="nav-cta magnetic" style="border-color:rgba(246,241,233,.5); color:#fff;">Begin Your Project →</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>SCROLL</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-imgwrap reveal">
+      <img class="lazy-img" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop" alt="Founder of Diva Interiors reviewing a material palette">
+      <div class="founder-card">
+        <div class="name">Ananya Rao</div>
+        <div class="role">Founder &amp; Principal Designer</div>
+        <p>"We don't decorate rooms. We design how a family will actually live in them — light, material, silence included."</p>
+      </div>
+    </div>
+    <div>
+      <div class="eyebrow reveal">Our Story</div>
+      <h2 class="h2 reveal">Eleven years of building homes Hyderabad doesn't forget.</h2>
+      <p class="lede reveal" style="margin-top:24px;">Diva Interiors began in 2014 as a two-person studio with one belief: that luxury isn't ornament, it's restraint executed perfectly. Today we're a 38-person atelier of architects, designers and master craftsmen delivering full turnkey residences, villas and commercial spaces across Hyderabad and beyond.</p>
+      <p class="lede reveal" style="margin-top:16px;">Every project — from a single modular kitchen to a 12,000 sq.ft villa — passes through the same five-stage process and the same obsession with material honesty: real wood, real marble, real light.</p>
+      <div class="stat-row">
+        <div class="reveal"><div class="num"><span class="counter" data-to="240">0</span>+</div><div class="lbl">Homes Delivered</div></div>
+        <div class="reveal"><div class="num"><span class="counter" data-to="11">0</span></div><div class="lbl">Years in Practice</div></div>
+        <div class="reveal"><div class="num"><span class="counter" data-to="38">0</span></div><div class="lbl">Studio Craftsmen</div></div>
+        <div class="reveal"><div class="num"><span class="counter" data-to="96">0</span>%</div><div class="lbl">Client Referral Rate</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap head">
+    <div class="eyebrow reveal">What We Design</div>
+    <h2 class="h2 reveal">A complete interior practice, one studio.</h2>
+    <p class="lede reveal" style="margin-top:18px;">Drag sideways, or scroll. Every service below has a dedicated team and a dedicated case-study page.</p>
+  </div>
+  <div class="hscroll-wrap">
+    <div class="hscroll" id="hscrollTrack">
+      <!-- cards injected style inline for brevity -->
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section id="ba">
+  <div class="wrap">
+    <div class="eyebrow reveal">Real Transformation</div>
+    <h2 class="h2 reveal">Drag the line. See the work.</h2>
+    <div class="ba-wrap reveal" id="baWrap">
+      <img class="ba-after" src="https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=2000&auto=format&fit=crop" alt="Living room after Diva Interiors renovation">
+      <div class="ba-before-wrap" id="baBeforeWrap">
+        <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?q=80&w=2000&auto=format&fit=crop" alt="Living room before renovation">
+      </div>
+      <div class="ba-tag left">BEFORE</div>
+      <div class="ba-tag right">AFTER</div>
+      <div class="ba-handle" id="baHandle"><div class="knob"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="wrap">
+    <div class="eyebrow reveal">Selected Work</div>
+    <h2 class="h2 reveal">Portfolio</h2>
+    <p class="lede reveal" style="margin-top:18px;">Each project opens into a full case study — gallery, floor plan, materials, budget, timeline and client testimonial.</p>
+    <div class="filter-row reveal">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="villa">Luxury Villas</button>
+      <button class="filter-btn" data-filter="apartment">Apartments</button>
+      <button class="filter-btn" data-filter="commercial">Commercial</button>
+      <button class="filter-btn" data-filter="kitchen">Kitchens</button>
+    </div>
+    <div class="masonry" id="masonryGrid"></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="process" style="padding-bottom:160px;">
+  <div class="wrap">
+    <div class="eyebrow reveal">How We Work</div>
+    <h2 class="h2 reveal">A five-stage journey, start to handover.</h2>
+    <div class="tl">
+      <div class="tl-line"><span id="tlProgress"></span></div>
+      <div class="tl-row">
+        <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 01</div><h4>Discovery</h4><p>Site visit, lifestyle brief, budget &amp; material conversation with your principal designer.</p></div>
+        <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 02</div><h4>Concept</h4><p>Moodboards, 3D walkthroughs and material palette presented for your sign-off.</p></div>
+        <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 03</div><h4>Design Detailing</h4><p>Working drawings, BOQ, vendor selection and final structural approvals.</p></div>
+        <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 04</div><h4>Execution</h4><p>In-house production, civil work and on-site quality checks every week.</p></div>
+        <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 05</div><h4>Handover</h4><p>Styling, deep clean, and a walkthrough before we hand you the keys.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALS -->
+<section style="padding-top:0; background:var(--ivory-deep);">
+  <div class="wrap">
+    <div class="eyebrow reveal">Material Partners</div>
+    <h2 class="h2 reveal" style="font-size:clamp(26px,3vw,36px);">We build only with names we'd put in our own homes.</h2>
+  </div>
+  <div class="marquee">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+</section>
+
+<!-- ESTIMATOR -->
+<section id="estimator">
+  <div class="wrap">
+    <div class="eyebrow reveal">Plan Your Budget</div>
+    <h2 class="h2 reveal">Interior Cost Estimator</h2>
+    <p class="lede reveal" style="margin-top:18px;">An indicative range — your principal designer will refine this after the discovery visit.</p>
+    <div class="est-grid">
+      <div class="est-panel reveal">
+        <div class="field">
+          <label>Carpet Area <span class="val"><span id="areaVal">1800</span> sq.ft</span></label>
+          <input type="range" id="areaSlider" min="600" max="8000" step="100" value="1800">
+        </div>
+        <div class="field">
+          <label>Space Type</label>
+          <div class="chip-row" id="spaceChips">
+            <div class="chip active" data-mult="1">Apartment</div>
+            <div class="chip" data-mult="1.18">Independent Villa</div>
+            <div class="chip" data-mult="0.85">Commercial</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Finish Level</label>
+          <div class="chip-row" id="finishChips">
+            <div class="chip" data-rate="1450">Premium</div>
+            <div class="chip active" data-rate="2100">Luxury</div>
+            <div class="chip" data-rate="3200">Ultra Luxury</div>
+          </div>
+        </div>
+      </div>
+      <div class="est-result reveal">
+        <div class="lbl">Estimated Budget Range</div>
+        <div class="price">₹<span id="estLow">38.0</span>L – ₹<span id="estHigh">46.2</span>L</div>
+        <p class="note">Based on full turnkey scope — civil, electrical, false ceiling, modular furniture, wardrobes and styling. Excludes structural/RCC work.</p>
+        <a href="#booking" class="nav-cta magnetic" style="margin-top:28px; border-color:var(--charcoal);">Get an Exact Quote →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="wrap">
+    <div class="eyebrow reveal">Client Voices</div>
+    <h2 class="h2 reveal">Trusted across Hyderabad.</h2>
+    <div class="test-grid" id="testGrid"></div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow reveal">Follow the Studio</div>
+    <h2 class="h2 reveal">@diva.interiors</h2>
+    <div class="insta-grid" id="instaGrid"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow reveal">Good to Know</div>
+    <h2 class="h2 reveal">Frequently Asked</h2>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="wrap book-grid">
+    <div class="book-info">
+      <div class="eyebrow">Start a Project</div>
+      <h2 class="h2">Book your private consultation.</h2>
+      <p>Meet your principal designer at our Hyderabad studio or on-site. No obligation, no hard sell — just a conversation about your space.</p>
+      <div class="contact-line">
+        <div><span>STUDIO</span> Road No. 10, Banjara Hills, Hyderabad</div>
+        <div><span>CALL</span> +91 98480 00000</div>
+        <div><span>EMAIL</span> hello@divainteriors.in</div>
+        <div><span>HOURS</span> Mon – Sat, 10am – 7pm</div>
+      </div>
+    </div>
+    <div class="form-card">
+      <form id="bookingForm" onsubmit="return false;">
+        <div class="form-row">
+          <div class="f-group"><label>Full Name</label><input type="text" required placeholder="Your name"></div>
+          <div class="f-group"><label>Phone</label><input type="tel" required placeholder="+91"></div>
+        </div>
+        <div class="form-row">
+          <div class="f-group"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+          <div class="f-group">
+            <label>Project Type</label>
+            <select>
+              <option>Residential Apartment</option>
+              <option>Luxury Villa</option>
+              <option>Modular Kitchen</option>
+              <option>Commercial Space</option>
+              <option>Renovation</option>
+            </select>
+          </div>
+        </div>
+        <div class="f-group"><label>Tell us about your space</label><textarea rows="3" placeholder="Area, location, timeline..."></textarea></div>
+        <button class="submit-btn" type="submit">Request Consultation</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-logo">DIVA<span>.</span></div>
+        <p class="desc">A Hyderabad luxury interior design studio crafting residences, villas and commercial spaces with quiet, material-led design.</p>
+      </div>
+      <div>
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#">Residential Interiors</a></li>
+          <li><a href="#">Luxury Villas</a></li>
+          <li><a href="#">Modular Kitchen</a></li>
+          <li><a href="#">Wardrobes</a></li>
+          <li><a href="#">Commercial Interiors</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Studio</h3>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#booking">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Pinterest</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">Google Reviews</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Diva Interiors. All rights reserved.</span>
+      <span>Luxury Interior Designers in Hyderabad — Banjara Hills · Jubilee Hills · Gachibowli</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------------- LOADER ---------------- */
+window.addEventListener('load', () => {
+  let p = 0;
+  const bar = document.getElementById('loaderBar');
+  const pct = document.getElementById('loaderPct');
+  const iv = setInterval(()=>{
+    p += Math.random()*18;
+    if(p>=100){p=100; clearInterval(iv);}
+    bar.style.width = p+'%';
+    pct.textContent = Math.floor(p)+'%';
+    if(p===100){
+      setTimeout(()=>{
+        gsap.to('#loader', {yPercent:-100, duration:0.9, ease:'power4.inOut', onComplete:()=>{
+          document.getElementById('loader').style.display='none';
+          playDissolve();
+        }});
+      }, 260);
+    }
+  }, 140);
+});
+
+/* ---------------- DISSOLVE CANVAS (hero->page grain reveal) ---------------- */
+function playDissolve(){
+  const canvas = document.getElementById('dissolve');
+  const ctx = canvas.getContext('2d');
+  const resize = ()=>{canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;};
+  resize();
+  const cols = 28, rows = 16;
+  const cw = canvas.width/cols, ch = canvas.height/rows;
+  let cells = [];
+  for(let y=0;y<rows;y++)for(let x=0;x<cols;x++)cells.push({x,y,delay:(x+y)*8 + Math.random()*120});
+  let start = null;
+  function frame(t){
+    if(!start) start = t;
+    const elapsed = t-start;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let done = true;
+    cells.forEach(c=>{
+      let local = elapsed - c.delay;
+      let prog = Math.min(Math.max(local/500,0),1);
+      if(prog<1) done = false;
+      ctx.fillStyle = `rgba(25,23,20,${(1-prog)*0.95})`;
+      ctx.fillRect(c.x*cw, c.y*ch, cw+1, ch+1);
+    });
+    if(!done) requestAnimationFrame(frame); else canvas.style.display='none';
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------------- LENIS SMOOTH SCROLL ---------------- */
+const lenis = new Lenis({ duration: 1.1, easing: t => 1 - Math.pow(1 - t, 4) });
+function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
+gsap.ticker.lagSmoothing(0);
+gsap.registerPlugin(ScrollTrigger);
+
+/* header state */
+const header = document.getElementById('siteHeader');
+ScrollTrigger.create({ start: 80, end: 99999, onUpdate: self => { header.classList.toggle('scrolled', self.scroll() > 80); } });
+
+/* reveal animations */
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.to(el, {
+    opacity:1, y:0, duration:1, ease:'power3.out',
+    scrollTrigger:{ trigger: el, start:'top 88%' }
+  });
+});
+
+/* counters */
+gsap.utils.toArray('.counter').forEach(el=>{
+  const to = +el.dataset.to;
+  ScrollTrigger.create({
+    trigger: el, start:'top 85%', once:true,
+    onEnter:()=>{ gsap.to({val:0}, {val:to, duration:1.6, ease:'power2.out', onUpdate:function(){ el.textContent = Math.floor(this.targets()[0].val); }}); }
+  });
+});
+
+/* hero parallax */
+gsap.to('.hero-img', { scale:1.18, ease:'none', scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:true } });
+
+/* ---------------- CURSOR ---------------- */
+const cursor = document.getElementById('cursor');
+window.addEventListener('mousemove', e=>{ gsap.to(cursor, {x:e.clientX, y:e.clientY, duration:0.15}); });
+document.querySelectorAll('a,button,.chip,.mcard,.faq-q,.service-card').forEach(el=>{
+  el.addEventListener('mouseenter', ()=>cursor.classList.add('big'));
+  el.addEventListener('mouseleave', ()=>cursor.classList.remove('big'));
+});
+
+/* ---------------- MAGNETIC BUTTONS ---------------- */
+document.querySelectorAll('.magnetic').forEach(btn=>{
+  btn.addEventListener('mousemove', e=>{
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2;
+    gsap.to(btn, {x:x*0.35, y:y*0.5, duration:0.4, ease:'power3.out'});
+  });
+  btn.addEventListener('mouseleave', ()=> gsap.to(btn, {x:0,y:0, duration:0.5, ease:'elastic.out(1,0.4)'}));
+});
+
+/* ---------------- SERVICES (horizontal scroll) ---------------- */
+const SERVICES = [
+  ["01","Residential Interiors","Full-home design and execution for apartments and independent homes.","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop"],
+  ["02","Luxury Villas","End-to-end villa interiors — from façade detailing to the last cushion.","https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop"],
+  ["03","Modular Kitchen","German hardware, stone counters, and layouts built around how you cook.","https://images.unsplash.com/photo-1556909114-44e3e70034e2?q=80&w=1000&auto=format&fit=crop"],
+  ["04","Wardrobes & Storage","Walk-ins and shutter wardrobes tailored to every wardrobe inch.","https://images.unsplash.com/photo-1631889993959-41b4e9c6e3c5?q=80&w=1000&auto=format&fit=crop"],
+  ["05","Living Room","Statement living spaces built around light, art and conversation.","https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1000&auto=format&fit=crop"],
+  ["06","Bedroom Suites","Calm, hotel-grade bedroom design — from headboards to lighting layers.","https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=1000&auto=format&fit=crop"],
+  ["07","Commercial Interiors","Offices, showrooms and hospitality spaces designed to perform.","https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop"],
+  ["08","Renovation","Full strip-outs and refreshes of older homes, without the chaos.","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1000&auto=format&fit=crop"],
+  ["09","Turnkey Projects","One contract, one timeline, one studio responsible for everything.","https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=1000&auto=format&fit=crop"]
+];
+const hTrack = document.getElementById('hscrollTrack');
+hTrack.innerHTML = SERVICES.map(s=>`
+  <div class="service-card">
+    <img src="${s[3]}" alt="${s[1]} — Diva Interiors Hyderabad" loading="lazy">
+    <div class="num">${s[0]}</div>
+    <div class="body">
+      <h3>${s[1]}</h3>
+      <p>${s[2]}</p>
+      <div class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="#191714" stroke-width="2"/></svg></div>
+    </div>
+  </div>`).join('');
+
+function setupHorizontalScroll(){
+  const wrap = document.querySelector('.hscroll-wrap');
+  const track = hTrack;
+  const getScrollAmount = ()=> track.scrollWidth - window.innerWidth + 48;
+  const tween = gsap.to(track, { x: ()=> -getScrollAmount(), ease:'none' });
+  ScrollTrigger.create({
+    trigger:'#services', start:'top top', end:()=>'+='+getScrollAmount(),
+    pin:true, animation:tween, scrub:1, invalidateOnRefresh:true
+  });
+}
+setupHorizontalScroll();
+
+/* ---------------- BEFORE/AFTER SLIDER ---------------- */
+const baWrap = document.getElementById('baWrap');
+const baBefore = document.getElementById('baBeforeWrap');
+const baHandle = document.getElementById('baHandle');
+let dragging = false;
+function setBA(clientX){
+  const r = baWrap.getBoundingClientRect();
+  let pct = ((clientX - r.left)/r.width)*100;
+  pct = Math.min(Math.max(pct,0),100);
+  baBefore.style.width = pct+'%';
+  baHandle.style.left = pct+'%';
+}
+baWrap.addEventListener('mousedown', ()=>dragging=true);
+window.addEventListener('mouseup', ()=>dragging=false);
+window.addEventListener('mousemove', e=>{ if(dragging) setBA(e.clientX); });
+baWrap.addEventListener('touchstart', ()=>dragging=true);
+window.addEventListener('touchend', ()=>dragging=false);
+baWrap.addEventListener('touchmove', e=>{ setBA(e.touches[0].clientX); });
+baWrap.addEventListener('click', e=> setBA(e.clientX));
+
+/* ---------------- PORTFOLIO MASONRY ---------------- */
+const PROJECTS = [
+  ["villa","Jubilee Hills Villa","8400 sq.ft · 2025","https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=900&auto=format&fit=crop"],
+  ["apartment","Gachibowli Skyline Residence","2100 sq.ft · 2024","https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=900&auto=format&fit=crop"],
+  ["kitchen","Banjara Hills Modular Kitchen","320 sq.ft · 2025","https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?q=80&w=900&auto=format&fit=crop"],
+  ["commercial","Hitec City Studio Office","6000 sq.ft · 2023","https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=900&auto=format&fit=crop"],
+  ["villa","Kokapet Lake Villa","11200 sq.ft · 2025","https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=900&auto=format&fit=crop"],
+  ["apartment","Financial District Penthouse","3400 sq.ft · 2024","https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=900&auto=format&fit=crop"],
+  ["commercial","Madhapur Boutique Showroom","1800 sq.ft · 2023","https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=900&auto=format&fit=crop"],
+  ["kitchen","Manikonda Open Kitchen","410 sq.ft · 2024","https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=900&auto=format&fit=crop"],
+  ["villa","Shamirpet Farmhouse","9600 sq.ft · 2022","https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=900&auto=format&fit=crop"]
+];
+const grid = document.getElementById('masonryGrid');
+function renderProjects(filter){
+  grid.innerHTML = PROJECTS.filter(p=> filter==='all' || p[0]===filter).map(p=>`
+    <div class="mcard">
+      <img class="lazy-img loaded" src="${p[3]}" alt="${p[1]} — luxury interior design Hyderabad" loading="lazy">
+      <div class="overlay"><div><h4>${p[1]}</h4><p>${p[2]}</p></div></div>
+    </div>`).join('');
+}
+renderProjects('all');
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProjects(btn.dataset.filter);
+  });
+});
+
+/* ---------------- TIMELINE PROGRESS ---------------- */
+gsap.to('#tlProgress', { width:'100%', ease:'none', scrollTrigger:{ trigger:'.tl', start:'top 70%', end:'bottom 80%', scrub:true } });
+
+/* ---------------- MATERIALS MARQUEE ---------------- */
+const MATERIALS = ["Italian Marble","Kohler","Hettich Hardware","Greenply","Asian Paints Royale","Hafele","Century Ply","Jaquar","Duravit","Crossville Stone"];
+document.getElementById('marqueeTrack').innerHTML = [...MATERIALS, ...MATERIALS].map(m=>`<span>${m}</span>`).join('');
+
+/* ---------------- ESTIMATOR ---------------- */
+const areaSlider = document.getElementById('areaSlider');
+const areaVal = document.getElementById('areaVal');
+let spaceMult = 1, finishRate = 2100;
+function calcEstimate(){
+  const area = +areaSlider.value;
+  areaVal.textContent = area;
+  const base = area * finishRate * spaceMult;
+  const low = (base*0.92)/100000, high = (base*1.12)/100000;
+  document.getElementById('estLow').textContent = low.toFixed(1);
+  document.getElementById('estHigh').textContent = high.toFixed(1);
+}
+areaSlider.addEventListener('input', calcEstimate);
+document.getElementById('spaceChips').addEventListener('click', e=>{
+  if(!e.target.classList.contains('chip')) return;
+  [...e.currentTarget.children].forEach(c=>c.classList.remove('active'));
+  e.target.classList.add('active'); spaceMult = +e.target.dataset.mult; calcEstimate();
+});
+document.getElementById('finishChips').addEventListener('click', e=>{
+  if(!e.target.classList.contains('chip')) return;
+  [...e.currentTarget.children].forEach(c=>c.classList.remove('active'));
+  e.target.classList.add('active'); finishRate = +e.target.dataset.rate; calcEstimate();
+});
+calcEstimate();
+
+/* ---------------- TESTIMONIALS ---------------- */
+const TESTIMONIALS = [
+  ["Diva designed our Jubilee Hills villa and the attention to material detail was unmatched. Every drawer, every joint — considered.","Rahul & Priya Menon","Jubilee Hills Villa, 2025","https://i.pravatar.cc/80?img=12"],
+  ["Our modular kitchen was delivered in exactly the timeline promised. No surprises, no extra costs. Exactly what a turnkey project should feel like.","Sandhya Reddy","Manikonda Apartment, 2024","https://i.pravatar.cc/80?img=32"],
+  ["They understood our office needed to feel calm, not corporate. The Hitec City studio gets compliments from every client who visits.","Arvind Kumar","Hitec City Office, 2023","https://i.pravatar.cc/80?img=51"]
+];
+document.getElementById('testGrid').innerHTML = TESTIMONIALS.map(t=>`
+  <div class="test-card reveal">
+    <div>
+      <div class="stars">★★★★★</div>
+      <p>"${t[0]}"</p>
+    </div>
+    <div class="who"><img src="${t[3]}" alt="${t[1]}"><div><b>${t[1]}</b><span>${t[2]}</span></div></div>
+  </div>`).join('');
+gsap.utils.toArray('.test-card.reveal').forEach(el=> gsap.to(el,{opacity:1,y:0,duration:0.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%'}}));
+
+/* ---------------- INSTAGRAM ---------------- */
+const INSTA = [
+  "https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1600121848594-d8644e57abab?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=400&auto=format&fit=crop"
+];
+document.getElementById('instaGrid').innerHTML = INSTA.map(src=>`
+  <div class="insta-item"><img src="${src}" loading="lazy" alt="Diva Interiors Instagram project"><div class="ov"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></div></div>`).join('');
+
+/* ---------------- FAQ ---------------- */
+const FAQS = [
+  ["How long does a full home interior project take?","A typical 2-3BHK apartment takes 75–90 working days from design freeze to handover. Villas range from 120–180 days depending on scope."],
+  ["Do you handle civil and electrical work too?","Yes — Diva Interiors is a true turnkey studio. Civil, electrical, plumbing coordination, false ceiling, modular furniture and styling are all under one contract."],
+  ["What is your minimum project size?","We take on single-room projects like modular kitchens and wardrobes as well as full 10,000+ sq.ft villas — there's no strict minimum."],
+  ["Can I see the 3D design before work begins?","Always. Every project includes photorealistic 3D walkthroughs at the concept stage, with revisions, before any execution begins."],
+  ["Do you offer warranty on the work?","Yes — a 5-year warranty on modular furniture and a 1-year warranty on civil and electrical work, with an annual maintenance visit."]
+];
+document.getElementById('faqList').innerHTML = FAQS.map((f,i)=>`
+  <div class="faq-item reveal ${i===0?'open':''}">
+    <div class="faq-q"><span>${f[0]}</span><div class="plus"></div></div>
+    <div class="faq-a" style="${i===0?'max-height:200px;':''}"><p>${f[1]}</p></div>
+  </div>`).join('');
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click', ()=>{
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>{ i.classList.remove('open'); i.querySelector('.faq-a').style.maxHeight=null; });
+    if(!isOpen){ item.classList.add('open'); const a = item.querySelector('.faq-a'); a.style.maxHeight = a.scrollHeight+'px'; }
+  });
+});
+
+/* refresh ScrollTrigger after dynamic content injected */
+window.addEventListener('load', ()=> setTimeout(()=>ScrollTrigger.refresh(), 600));
+</script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diva Interiors — Luxury Interior Design Studio, Hyderabad</title>
+    <meta name="description" content="Diva Interiors crafts bespoke luxury homes, villas and commercial spaces in Hyderabad — turnkey interior design with a five-stage atelier process.">
+    
+    <!-- Google Fonts & FontShare -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@200;300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- Libraries (GSAP & ScrollTrigger & Lenis) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+</head>
+<body>
+    <!-- Custom GSAP Magnetic Cursor -->
+    <div id="cursor"></div>
+
+    <!-- Luxurious Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader-content">
+            <div class="loader-bar-container">
+                <div class="loader-bar" id="loader-bar"></div>
+            </div>
+            <div class="loader-percentage" id="loader-percentage">0%</div>
+        </div>
+    </div>
+
+    <!-- Website Header (Fades in after passing the scroll animation) -->
+    <header id="siteHeader" class="hidden-initially">
+        <a href="#animation-trigger-zone" class="logo">DIVA<span>.</span>INTERIORS</a>
+        <nav class="links">
+            <a href="#about">Studio</a>
+            <a href="#services">Services</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#process">Process</a>
+            <a href="#faq">FAQ</a>
+        </nav>
+        <a href="#booking" class="nav-cta magnetic">Book Consultation</a>
+    </header>
+
+    <!-- Scroll Progress Indicator -->
+    <div class="progress-indicator">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <!-- 1. SCROLL ANIMATION ZONE (Hero Replacement) -->
+    <div id="animation-trigger-zone" class="scroll-animation-wrapper">
+        <!-- Sticky Canvas Container -->
+        <div class="canvas-container">
+            <canvas id="animation-canvas"></canvas>
+            <div class="canvas-overlay"></div>
+        </div>
+
+        <!-- Scroll Sections to map frame updates -->
+        <div class="scroll-container">
+            <section class="scroll-section" id="hero-frame"></section>
+            <section class="scroll-section" id="explore-frame"></section>
+            <section class="scroll-section" id="lighting-frame"></section>
+            <section class="scroll-section" id="materials-frame"></section>
+            <section class="scroll-section" id="minimalism-frame"></section>
+            <section class="scroll-section" id="contact-frame"></section>
+        </div>
+    </div>
+
+    <!-- 2. HOME PAGE CONTENT SECTIONS (Light Mode / Ivory) -->
+    
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="wrap about-grid">
+            <div class="about-imgwrap reveal">
+                <img class="lazy-img loaded" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop" alt="Founder of Diva Interiors reviewing a material palette">
+                <div class="founder-card">
+                    <div class="name">Ananya Rao</div>
+                    <div class="role">Founder &amp; Principal Designer</div>
+                    <p>"We don't decorate rooms. We design how a family will actually live in them — light, material, silence included."</p>
+                </div>
+            </div>
+            <div>
+                <div class="eyebrow reveal">Our Story</div>
+                <h2 class="h2 reveal">Eleven years of building homes Hyderabad doesn't forget.</h2>
+                <p class="lede reveal" style="margin-top:24px;">Diva Interiors began in 2014 as a two-person studio with one belief: that luxury isn't ornament, it's restraint executed perfectly. Today we're a 38-person atelier of architects, designers and master craftsmen delivering full turnkey residences, villas and commercial spaces across Hyderabad and beyond.</p>
+                <p class="lede reveal" style="margin-top:16px;">Every project — from a single modular kitchen to a 12,000 sq.ft villa — passes through the same five-stage process and the same obsession with material honesty: real wood, real marble, real light.</p>
+                <div class="stat-row">
+                    <div class="reveal"><div class="num"><span class="counter" data-to="240">0</span>+</div><div class="lbl">Homes Delivered</div></div>
+                    <div class="reveal"><div class="num"><span class="counter" data-to="11">0</span></div><div class="lbl">Years in Practice</div></div>
+                    <div class="reveal"><div class="num"><span class="counter" data-to="38">0</span></div><div class="lbl">Studio Craftsmen</div></div>
+                    <div class="reveal"><div class="num"><span class="counter" data-to="96">0</span>%</div><div class="lbl">Client Referral Rate</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="wrap head">
+            <div class="eyebrow reveal">What We Design</div>
+            <h2 class="h2 reveal">A complete interior practice, one studio.</h2>
+            <p class="lede reveal" style="margin-top:18px;">Drag sideways, or scroll. Every service below has a dedicated team and a dedicated case-study page.</p>
+        </div>
+        <div class="hscroll-wrap">
+            <div class="hscroll" id="hscrollTrack">
+                <!-- Cards dynamically injected in JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- BEFORE / AFTER -->
+    <section id="ba">
+        <div class="wrap">
+            <div class="eyebrow reveal">Real Transformation</div>
+            <h2 class="h2 reveal">Drag the line. See the work.</h2>
+            <div class="ba-wrap reveal" id="baWrap">
+                <img class="ba-after" src="https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=2000&auto=format&fit=crop" alt="Living room after Diva Interiors renovation">
+                <div class="ba-before-wrap" id="baBeforeWrap">
+                    <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?q=80&w=2000&auto=format&fit=crop" alt="Living room before renovation">
+                </div>
+                <div class="ba-tag left">BEFORE</div>
+                <div class="ba-tag right">AFTER</div>
+                <div class="ba-handle" id="baHandle"><div class="knob"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio">
+        <div class="wrap">
+            <div class="eyebrow reveal">Selected Work</div>
+            <h2 class="h2 reveal">Portfolio</h2>
+            <p class="lede reveal" style="margin-top:18px;">Each project opens into a full case study — gallery, floor plan, materials, budget, timeline and client testimonial.</p>
+            <div class="filter-row reveal">
+                <button class="filter-btn active" data-filter="all">All Projects</button>
+                <button class="filter-btn" data-filter="villa">Luxury Villas</button>
+                <button class="filter-btn" data-filter="apartment">Apartments</button>
+                <button class="filter-btn" data-filter="commercial">Commercial</button>
+                <button class="filter-btn" data-filter="kitchen">Kitchens</button>
+            </div>
+            <div class="masonry" id="masonryGrid"></div>
+        </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section id="process" style="padding-bottom:160px;">
+        <div class="wrap">
+            <div class="eyebrow reveal">How We Work</div>
+            <h2 class="h2 reveal">A five-stage journey, start to handover.</h2>
+            <div class="tl">
+                <div class="tl-line"><span id="tlProgress"></span></div>
+                <div class="tl-row">
+                    <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 01</div><h4>Discovery</h4><p>Site visit, lifestyle brief, budget &amp; material conversation with your principal designer.</p></div>
+                    <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 02</div><h4>Concept</h4><p>Moodboards, 3D walkthroughs and material palette presented for your sign-off.</p></div>
+                    <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 03</div><h4>Design Detailing</h4><p>Working drawings, BOQ, vendor selection and final structural approvals.</p></div>
+                    <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 04</div><h4>Execution</h4><p>In-house production, civil work and on-site quality checks every week.</p></div>
+                    <div class="tl-item reveal"><div class="dot"></div><div class="step">STAGE 05</div><h4>Handover</h4><p>Styling, deep clean, and a walkthrough before we hand you the keys.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MATERIALS MARQUEE -->
+    <section style="padding-top:0; background:var(--ivory-deep);">
+        <div class="wrap">
+            <div class="eyebrow reveal">Material Partners</div>
+            <h2 class="h2 reveal" style="font-size:clamp(26px,3vw,36px);">We build only with names we'd put in our own homes.</h2>
+        </div>
+        <div class="marquee">
+            <div class="marquee-track" id="marqueeTrack"></div>
+        </div>
+    </section>
+
+    <!-- ESTIMATOR -->
+    <section id="estimator">
+        <div class="wrap">
+            <div class="eyebrow reveal">Plan Your Budget</div>
+            <h2 class="h2 reveal">Interior Cost Estimator</h2>
+            <p class="lede reveal" style="margin-top:18px;">An indicative range — your principal designer will refine this after the discovery visit.</p>
+            <div class="est-grid">
+                <div class="est-panel reveal">
+                    <div class="field">
+                        <label>Carpet Area <span class="val"><span id="areaVal">1800</span> sq.ft</span></label>
+                        <input type="range" id="areaSlider" min="600" max="8000" step="100" value="1800">
+                    </div>
+                    <div class="field">
+                        <label>Space Type</label>
+                        <div class="chip-row" id="spaceChips">
+                            <div class="chip active" data-mult="1">Apartment</div>
+                            <div class="chip" data-mult="1.18">Independent Villa</div>
+                            <div class="chip" data-mult="0.85">Commercial</div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Finish Level</label>
+                        <div class="chip-row" id="finishChips">
+                            <div class="chip" data-rate="1450">Premium</div>
+                            <div class="chip active" data-rate="2100">Luxury</div>
+                            <div class="chip" data-rate="3200">Ultra Luxury</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="est-result reveal">
+                    <div class="lbl">Estimated Budget Range</div>
+                    <div class="price">₹<span id="estLow">38.0</span>L – ₹<span id="estHigh">46.2</span>L</div>
+                    <p class="note">Based on full turnkey scope — civil, electrical, false ceiling, modular furniture, wardrobes and styling. Excludes structural/RCC work.</p>
+                    <a href="#booking" class="nav-cta magnetic" style="margin-top:28px; border-color:var(--charcoal);">Get an Exact Quote →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="wrap">
+            <div class="eyebrow reveal">Client Voices</div>
+            <h2 class="h2 reveal">Trusted across Hyderabad.</h2>
+            <div class="test-grid" id="testGrid"></div>
+        </div>
+    </section>
+
+    <!-- INSTAGRAM -->
+    <section style="padding-top:0;">
+        <div class="wrap">
+            <div class="eyebrow reveal">Follow the Studio</div>
+            <h2 class="h2 reveal">@diva.interiors</h2>
+            <div class="insta-grid" id="instaGrid"></div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="wrap">
+            <div class="eyebrow reveal">Good to Know</div>
+            <h2 class="h2 reveal">Frequently Asked</h2>
+            <div class="faq-list" id="faqList"></div>
+        </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking">
+        <div class="wrap book-grid">
+            <div class="book-info">
+                <div class="eyebrow">Start a Project</div>
+                <h2 class="h2">Book your private consultation.</h2>
+                <p>Meet your principal designer at our Hyderabad studio or on-site. No obligation, no hard sell — just a conversation about your space.</p>
+                <div class="contact-line">
+                    <div><span>STUDIO</span> Road No. 10, Banjara Hills, Hyderabad</div>
+                    <div><span>CALL</span> +91 98480 00000</div>
+                    <div><span>EMAIL</span> hello@divainteriors.in</div>
+                    <div><span>HOURS</span> Mon – Sat, 10am – 7pm</div>
+                </div>
+            </div>
+            <div class="form-card">
+                <form id="bookingForm" onsubmit="return false;">
+                    <div class="form-row">
+                        <div class="f-group"><label>Full Name</label><input type="text" required placeholder="Your name"></div>
+                        <div class="f-group"><label>Phone</label><input type="tel" required placeholder="+91"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="f-group"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+                        <div class="f-group">
+                            <label>Project Type</label>
+                            <select>
+                                <option>Residential Apartment</option>
+                                <option>Luxury Villa</option>
+                                <option>Modular Kitchen</option>
+                                <option>Commercial Space</option>
+                                <option>Renovation</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="f-group"><label>Tell us about your space</label><textarea rows="3" placeholder="Area, location, timeline..."></textarea></div>
+                    <button class="submit-btn" type="submit">Request Consultation</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="wrap">
+            <div class="foot-top">
+                <div>
+                    <div class="foot-logo">DIVA<span>.</span></div>
+                    <p class="desc">A Hyderabad luxury interior design studio crafting residences, villas and commercial spaces with quiet, material-led design.</p>
+                </div>
+                <div>
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Residential Interiors</a></li>
+                        <li><a href="#">Luxury Villas</a></li>
+                        <li><a href="#">Modular Kitchen</a></li>
+                        <li><a href="#">Wardrobes</a></li>
+                        <li><a href="#">Commercial Interiors</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Studio</h3>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Portfolio</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#process">Process</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Pinterest</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Google Reviews</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>© 2026 Diva Interiors. All rights reserved.</span>
+                <span>Luxury Interior Designers in Hyderabad — Banjara Hills · Jubilee Hills · Gachibowli</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script Entrypoint -->
+    <script type="module" src="/main.js"></script>
+</body>
+</html>
