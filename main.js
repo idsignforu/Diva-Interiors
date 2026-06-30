@@ -74,10 +74,22 @@ function resizeCanvas() {
     renderFrame(scrollState.currentFrame);
 }
 
+let lastWidth = window.innerWidth;
+let lastHeight = window.innerHeight;
+
 function initializeCanvas() {
     if (!canvas) return;
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', () => {
+        const widthChanged = window.innerWidth !== lastWidth;
+        const heightChanged = Math.abs(window.innerHeight - lastHeight) > 120;
+        
+        if (widthChanged || heightChanged) {
+            lastWidth = window.innerWidth;
+            lastHeight = window.innerHeight;
+            resizeCanvas();
+        }
+    });
     requestAnimationFrame(updateAnimation);
 }
 
@@ -258,17 +270,21 @@ function initializePageAnimations() {
                 </div>
             </div>`).join('');
             
-        const getScrollAmount = () => hTrack.scrollWidth - window.innerWidth + 48;
-        const tween = gsap.to(hTrack, { x: () => -getScrollAmount(), ease: 'none' });
-        
-        ScrollTrigger.create({
-            trigger: '#services', 
-            start: 'top top', 
-            end: () => '+=' + getScrollAmount(),
-            pin: true, 
-            animation: tween, 
-            scrub: 1, 
-            invalidateOnRefresh: true
+        // Only run horizontal scroll pin on desktop (> 780px)
+        let mm = gsap.matchMedia();
+        mm.add("(min-width: 781px)", () => {
+            const getScrollAmount = () => hTrack.scrollWidth - window.innerWidth + 48;
+            const tween = gsap.to(hTrack, { x: () => -getScrollAmount(), ease: 'none' });
+            
+            ScrollTrigger.create({
+                trigger: '#services', 
+                start: 'top top', 
+                end: () => '+=' + getScrollAmount(),
+                pin: true, 
+                animation: tween, 
+                scrub: 1, 
+                invalidateOnRefresh: true
+            });
         });
     }
 
