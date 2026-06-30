@@ -13,6 +13,7 @@ const loaderPercentage = document.getElementById('loader-percentage');
 const progressBar = document.getElementById('progress-bar');
 const triggerZone = document.getElementById('animation-trigger-zone');
 const header = document.getElementById('siteHeader');
+const heroOverlay = document.getElementById('hero-overlay');
 
 // Scroll Animation Easing State
 const scrollState = {
@@ -135,6 +136,14 @@ window.addEventListener('scroll', () => {
         
         scrollState.targetFrame = scrollFraction * (TOTAL_FRAMES - 1);
         if (progressBar) progressBar.style.width = `${scrollFraction * 100}%`;
+
+        // Fade out hero brand and scroll cue as the user scrolls down
+        if (heroOverlay) {
+            const heroOpacity = Math.max(0, 1 - (scrollFraction / 0.08)); // fade out by 8% scroll depth
+            heroOverlay.style.opacity = heroOpacity;
+            heroOverlay.style.transform = `translate(-50%, calc(-50% - ${scrollFraction * 250}px))`;
+            heroOverlay.style.pointerEvents = heroOpacity > 0.01 ? 'auto' : 'none';
+        }
 
         // Hide navigation header when scroll animation is active, show afterwards
         if (header) {
